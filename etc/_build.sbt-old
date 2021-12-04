@@ -1,0 +1,18 @@
+val scala3Version = "3.1.0"
+
+val AkkaVersion = "2.6.17"
+val AkkaHttpVersion = "10.2.7"
+
+lazy val root = project
+  .in(file("."))
+  .settings(
+    name := "myconsole",
+    version := "0.1.0",
+    scalaVersion := scala3Version,
+    fork in (Compile, console) := true,
+    libraryDependencies ++= Seq(
+      ("com.typesafe.akka" %% "akka-actor-typed" % AkkaVersion).cross(CrossVersion.for3Use2_13),
+      ("com.typesafe.akka" %% "akka-stream" % AkkaVersion).cross(CrossVersion.for3Use2_13),
+      ("com.typesafe.akka" %% "akka-http" % AkkaHttpVersion).cross(CrossVersion.for3Use2_13)
+    )
+  )
