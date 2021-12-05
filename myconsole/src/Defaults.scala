@@ -11,7 +11,7 @@ def help =
       |""".stripMargin
 
 def ls =
-  "ls".!!
+  "ls".!!.split("\n").toList
 
 @main
 def googleQuery(q: String) =
