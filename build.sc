@@ -2,7 +2,7 @@ import Deps._
 import mill._
 import mill.scalalib._
 
-object myconsole extends Common {
+object con extends Common {
   def scalaVersion = ScalaVersion
   override def ivyDeps = Agg(Akka: _*)
 
