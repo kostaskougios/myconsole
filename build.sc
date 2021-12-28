@@ -6,11 +6,17 @@ import os.{Path, PermSet}
 object con extends Common {
   override def scalaVersion = ScalaVersion
   override def ivyDeps = Agg(Akka: _*)
+}
+
+trait Common extends ScalaModule {
+  override def scalaVersion = "3.1.0"
+  override def scalacOptions = Seq("-deprecation", "-feature", "-unchecked")
 
   def assemblyMultipleApps = T {
     val assemblyPath = assembly()
     val mains = zincWorker.worker().discoverMainClasses(compile())
 
+//    guava CaseFormat
     println(s"Found these executable main methods:\n${mains.mkString("\n")}")
     val targetPath = assemblyPath.path
     val targetDir = Path(targetPath.toNIO.getParent)
@@ -29,11 +35,6 @@ object con extends Common {
     println(s"executable scripts under $targetDir")
   }
 
-}
-
-trait Common extends ScalaModule {
-  override def scalaVersion = "3.1.0"
-  override def scalacOptions = Seq("-deprecation", "-feature", "-unchecked")
 }
 
 object Deps {
