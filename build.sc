@@ -18,7 +18,10 @@ object con extends Common {
     for (m <- mains) {
       val script =
         s"""
-           |java -cp out.jar $m
+           |temp=$$( realpath "$$0" )
+           |S=$$(dirname "$$temp")
+           |
+           |java -cp $$S/out.jar $m "$$@"
            |""".stripMargin
       val targetScript = targetDir / m
       os.write(targetScript, script, permSet)

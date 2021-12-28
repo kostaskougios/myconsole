@@ -15,6 +15,9 @@ def ls =
   "ls".!!.split("\n").toList
 
 @main
+def echoArgs(arg1: String, arg2: String) = println(arg1 + ", " + arg2)
+
+@main
 def googleQuery(q: String) =
   AppModule.withBeansDo { beans =>
     import beans.*
