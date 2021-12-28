@@ -5,10 +5,11 @@ import utils.*
 
 import scala.sys.process.*
 
+@main
 def help =
-  """
+  println("""
       |This is the help page for myconsole.
-      |""".stripMargin
+      |""".stripMargin)
 
 def ls =
   "ls".!!.split("\n").toList

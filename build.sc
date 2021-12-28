@@ -1,16 +1,31 @@
 import Deps._
 import mill._
 import mill.scalalib._
+import os.{Path, PermSet}
 
 object con extends Common {
-  def scalaVersion = ScalaVersion
+  override def scalaVersion = ScalaVersion
   override def ivyDeps = Agg(Akka: _*)
 
-//  object test extends Tests
-//  {
-//    override def ivyDeps =  Agg(ScalaTest)
-//    override def testFramework = T("org.scalatest.tools.Framework")
-//  }
+  def assemblyMultipleApps = T {
+    val assemblyPath = assembly()
+    val mains = zincWorker.worker().discoverMainClasses(compile())
+
+    println(s"Found these executable main methods:\n${mains.mkString("\n")}")
+    val targetPath = assemblyPath.path
+    val targetDir = Path(targetPath.toNIO.getParent)
+    val permSet = PermSet.fromString("rwx------")
+    for (m <- mains) {
+      val script =
+        s"""
+           |java -cp out.jar $m
+           |""".stripMargin
+      val targetScript = targetDir / m
+      os.write(targetScript, script, permSet)
+    }
+    println(s"executable scripts under $targetDir")
+  }
+
 }
 
 trait Common extends ScalaModule {
