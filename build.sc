@@ -1,7 +1,9 @@
 import Deps._
+import com.google.common.base.CaseFormat
 import mill._
 import mill.scalalib._
 import os.{Path, PermSet}
+//import $ivy.`com.google.guava:guava:31.0.1-jre`
 
 object con extends Common with AssemblyMultipleApps {
   override def scalaVersion = ScalaVersion
@@ -18,7 +20,6 @@ trait AssemblyMultipleApps extends JavaModule {
     val assemblyPath = assembly()
     val mains = zincWorker.worker().discoverMainClasses(compile())
 
-    //    guava CaseFormat , https://stackoverflow.com/questions/34228942/from-snake-case-to-camelcase-in-java
     println(s"Found these executable main methods:\n${mains.mkString("\n")}")
     val targetPath = assemblyPath.path
     val targetDir = Path(targetPath.toNIO.getParent)
@@ -31,7 +32,7 @@ trait AssemblyMultipleApps extends JavaModule {
            |
            |java -cp $$S/out.jar $m "$$@"
            |""".stripMargin
-      val targetScript = targetDir / m
+      val targetScript = targetDir / CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_HYPHEN, m)
       os.write(targetScript, script, permSet)
     }
     println(s"executable scripts under $targetDir")
