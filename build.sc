@@ -3,15 +3,21 @@ import com.google.common.base.CaseFormat
 import mill._
 import mill.scalalib._
 import os.{Path, PermSet}
-//import $ivy.`com.google.guava:guava:31.0.1-jre`
 
 object con extends Common with AssemblyMultipleApps {
-  override def scalaVersion = ScalaVersion
+  override def moduleDeps = Seq(http)
+}
+
+object lib extends Common {
+}
+
+object http extends Common {
   override def ivyDeps = Agg(Akka: _*)
+  override def moduleDeps = Seq(lib)
 }
 
 trait Common extends ScalaModule {
-  override def scalaVersion = "3.1.0"
+  override def scalaVersion = ScalaVersion
   override def scalacOptions = Seq("-deprecation", "-feature", "-unchecked")
 }
 

@@ -19,7 +19,7 @@ class HttpService:
   private val http = Http()
 
   def get(uri: String): Future[HttpResponse] = http.singleRequest(Get(uri = uri))
-  def getAsString(uri: String) = get(uri).flatMap(r => Unmarshaller.stringUnmarshaller(r.entity))
+  def getAsString(uri: String): Future[String] = get(uri).flatMap(r => Unmarshaller.stringUnmarshaller(r.entity))
 
   def shutdown() =
     http.shutdownAllConnectionPools()
