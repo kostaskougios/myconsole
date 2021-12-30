@@ -3,7 +3,7 @@ import mill._
 import mill.scalalib._
 import os.{Path, PermSet}
 
-object con extends Common {
+object con extends Common with AssemblyMultipleApps {
   override def scalaVersion = ScalaVersion
   override def ivyDeps = Agg(Akka: _*)
 }
@@ -11,12 +11,14 @@ object con extends Common {
 trait Common extends ScalaModule {
   override def scalaVersion = "3.1.0"
   override def scalacOptions = Seq("-deprecation", "-feature", "-unchecked")
+}
 
+trait AssemblyMultipleApps extends JavaModule {
   def assemblyMultipleApps = T {
     val assemblyPath = assembly()
     val mains = zincWorker.worker().discoverMainClasses(compile())
 
-//    guava CaseFormat
+    //    guava CaseFormat , https://stackoverflow.com/questions/34228942/from-snake-case-to-camelcase-in-java
     println(s"Found these executable main methods:\n${mains.mkString("\n")}")
     val targetPath = assemblyPath.path
     val targetDir = Path(targetPath.toNIO.getParent)
@@ -34,7 +36,6 @@ trait Common extends ScalaModule {
     }
     println(s"executable scripts under $targetDir")
   }
-
 }
 
 object Deps {
