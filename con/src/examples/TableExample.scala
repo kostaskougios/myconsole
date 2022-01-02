@@ -1,7 +1,7 @@
 package examples
 
 import f.model.out.Table
-import modules.AppModule.withBeansDo
+import modules.StaticAppModule.*
 
 object TableExample:
   def calculateTable =
@@ -14,9 +14,6 @@ object TableExample:
 
 @main
 def calculateTable() =
-  withBeansDo { beans =>
-    import beans.*
-    consoleRunnerService.run { () =>
-      Table(TableExample.calculateTable)
-    }
+  consoleRunnerService.run { () =>
+    Table(TableExample.calculateTable)
   }

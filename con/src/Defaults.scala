@@ -1,6 +1,5 @@
 // https://dotty.epfl.ch/api/scala/sys/process.html
-import modules.AppModule
-import modules.AppModule.*
+import modules.StaticAppModule.*
 import utils.*
 
 import scala.sys.process.*
@@ -19,7 +18,4 @@ def echoArgs(arg1: String, arg2: String) = println(arg1 + ", " + arg2)
 
 @main
 def googleQuery(q: String) =
-  AppModule.withBeansDo { beans =>
-    import beans.*
-    println(httpService.getAsString(s"https://www.google.com/search?q=$q").await)
-  }
+  println(httpService.getAsString(s"https://www.google.com/search?q=$q").await)
