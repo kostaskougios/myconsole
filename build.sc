@@ -5,10 +5,15 @@ import mill.scalalib._
 import os.{Path, PermSet}
 
 object con extends Common with AssemblyMultipleApps {
-  override def moduleDeps = Seq(http)
+  override def moduleDeps = Seq(http, `f-model`, `f-service`)
 }
 
-object lib extends Common {
+object lib extends Common {}
+
+object `f-model` extends Common {}
+
+object `f-service` extends Common {
+  override def moduleDeps = Seq(`f-model`)
 }
 
 object http extends Common {
@@ -24,7 +29,8 @@ trait Common extends ScalaModule {
 trait AssemblyMultipleApps extends JavaModule {
   def assemblyMultipleApps = T {
     val assemblyPath = assembly()
-    val mains = zincWorker.worker().discoverMainClasses(compile())
+    val compilationResult = compile()
+    val mains = zincWorker.worker().discoverMainClasses(compilationResult)
 
     println(s"Found these executable main methods:\n${mains.mkString("\n")}")
     val targetPath = assemblyPath.path
