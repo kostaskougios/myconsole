@@ -4,16 +4,22 @@ import f.model.out.Table
 import modules.StaticAppModule.*
 
 object TableExample:
-  def calculateTable =
+  def people =
     Seq(
-      Seq("name", "age"),
-      Seq("Kostas", 25),
-      Seq("George", 30),
-      Seq("Nick", 35)
+      Person("Kostas", 25),
+      Person("George", 30),
+      Person("Nick", 35)
     )
+
+  def avgAge = people.map(_.age).sum
 
 @main
 def calculateTable() =
   consoleRunnerService.run { () =>
-    Table(TableExample.calculateTable)
+    Table.products(
+      TableExample.people
+    )
   }
+
+case class Person(name: String, age: Int):
+  def toRow = Seq(name, age)
