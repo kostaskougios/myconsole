@@ -6,6 +6,7 @@ class ConsoleRunnerService:
   def run(f: () => Output): Unit =
     val o = f()
     val c = o match
+      case Line(line)   => line
       case Table(table) => TableFormatter.toConsole(table)
 
     println(c)

@@ -1,9 +1,12 @@
 package examples
 
-import f.model.out.Table
+import f.model.out.{Line, Table}
 import modules.StaticAppModule.*
 
 object TableExample:
+
+  case class Person(name: String, age: Int)
+
   def people =
     Seq(
       Person("Kostas", 25),
@@ -11,7 +14,7 @@ object TableExample:
       Person("Nick", 35)
     )
 
-  def avgAge = people.map(_.age).sum
+  def avgAge = people.map(_.age).sum / people.size
 
 @main
 def calculateTable() =
@@ -21,5 +24,10 @@ def calculateTable() =
     )
   }
 
-case class Person(name: String, age: Int):
-  def toRow = Seq(name, age)
+@main
+def avgAge() =
+  consoleRunnerService.run { () =>
+    Line(
+      "Average age = " + TableExample.avgAge
+    )
+  }
