@@ -16,7 +16,7 @@ object TableExample:
 @main
 def calculateTable() =
   consoleRunnerService.run { () =>
-    Table.products(
+    Table.from(
       TableExample.people
     )
   }
