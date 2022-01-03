@@ -2,6 +2,7 @@ import Deps._
 import com.google.common.base.CaseFormat
 import mill._
 import mill.scalalib._
+import org.apache.commons.lang3.StringUtils
 import os.{Path, PermSet}
 
 object con extends Common with AssemblyMultipleApps {
@@ -44,7 +45,8 @@ trait AssemblyMultipleApps extends JavaModule {
            |
            |java -cp $$S/out.jar $m "$$@"
            |""".stripMargin
-      val targetScript = targetDir / CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_HYPHEN, m)
+      val scriptName= if(m.contains(".")) StringUtils.substringAfterLast(m,".") else m
+      val targetScript = targetDir / CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_HYPHEN, scriptName)
       os.write(targetScript, script, permSet)
     }
     println(s"executable scripts under $targetDir")
