@@ -18,4 +18,4 @@ def echoArgs(arg1: String, arg2: String) = println(arg1 + ", " + arg2)
 
 @main
 def googleQuery(q: String) =
-  println(httpService.getAsString(s"https://www.google.com/search?q=$q").await)
+  println(httpService.get(s"https://www.google.com/search?q=$q").entityToString)

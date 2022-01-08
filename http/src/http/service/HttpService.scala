@@ -6,7 +6,9 @@ import akka.http.scaladsl.client.RequestBuilding.Get
 import akka.http.scaladsl.model.*
 import akka.http.scaladsl.unmarshalling.{Unmarshal, Unmarshaller}
 import akka.http.scaladsl.{Http, unmarshalling}
+import http.model.*
 import modules.Beans
+import utils.await
 
 import scala.concurrent.{ExecutionContextExecutor, Future}
 import scala.util.{Failure, Success}
@@ -18,8 +20,7 @@ class HttpService:
 
   private val http = Http()
 
-  def get(uri: String): Future[HttpResponse] = http.singleRequest(Get(uri = uri))
-  def getAsString(uri: String): Future[String] = get(uri).flatMap(r => Unmarshaller.stringUnmarshaller(r.entity))
+  def get(uri: String): Response = Response(http.singleRequest(Get(uri = uri)).await)
 
   def shutdown() =
     http.shutdownAllConnectionPools()
