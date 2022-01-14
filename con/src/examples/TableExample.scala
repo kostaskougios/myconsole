@@ -7,26 +7,26 @@ object TableExample:
 
   case class Person(name: String, age: Int)
 
-  def people =
+  def people: Seq[Person] =
     Seq(
       Person("Kostas", 25),
       Person("George", 30),
       Person("Nick", 35)
     )
 
-  def avgAge = people.map(_.age).sum / people.size
+  def avgAge: Int = people.map(_.age).sum / people.size
 
 @main
-def calculateTable() =
-  consoleRunnerService.run { () =>
+def calculateTable(): Int =
+  runnerService.run { () =>
     Table.from(
       TableExample.people
     )
   }
 
 @main
-def avgAge() =
-  consoleRunnerService.run { () =>
+def avgAge(): Int =
+  runnerService.run { () =>
     Line(
       "Average age = " + TableExample.avgAge
     )

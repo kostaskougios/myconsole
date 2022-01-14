@@ -40,6 +40,10 @@ trait AssemblyMultipleApps extends JavaModule {
     for (m <- mains) {
       val script =
         s"""
+           |
+           |realpath() {
+           |    [[ $$1 = /* ]] && echo "$$1" || echo "$$PWD/$${1#./}"
+           |}
            |temp=$$( realpath "$$0" )
            |S=$$(dirname "$$temp")
            |
