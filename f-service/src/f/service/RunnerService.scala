@@ -1,4 +1,5 @@
 package f.service
+import f.model.InOut
 import f.model.in.*
 import f.model.out.*
 import f.service.utils.TableFormatter
@@ -9,27 +10,30 @@ import scala.io.StdIn
   *   - If the code runs within a terminal, it uses a terminal in/out.
   *   - If the code runs in the notebook env, it uses notebook in/out
   */
-class RunnerService:
-  def run(f: () => Output): Int = run(Map.empty, f)
+class RunnerService[S <: InputState[S]]:
+  def execute(s: S, inOut: S => InOut): S =
+    val newS = inOut(s).io.foldLeft(s) {
+      case (s, i: Input) => ask(s, i)
+      case (s, o: Output) =>
+        render(o)
+        s
+    }
+    newS
 
-  private def run(answers: Map[String, String], f: () => Output): Int =
-    val o = f()
-    val c = o match
+  def render(output: Output): Unit =
+    val text = output match
       case Line(line)   => line
       case Table(table) => TableFormatter.toConsole(table)
-      case Ask(input: Input) =>
-        ask(answers, f, input)
-    println(c)
-    0
+    println(text)
 
-  private def ask(answers: Map[String, String], f: () => Output, input: Input) =
-    val (id, in) = input match
-      case YorNQuestion(id, question, yesText, noText) =>
+  def ask(s: S, input: Input): S =
+    input match
+      case q @ YorNQuestion(id, question, yesText, noText) =>
         println(s"$question ($yesText / $noText) ?")
         val in = StdIn.readLine()
-        (id, in)
+        if in.equalsIgnoreCase(yesText) then s.withAnswer(q, yesText)
+        else if in.equalsIgnoreCase(noText) then s.withAnswer(q, noText)
+        else s
 
-    run(answers + (id -> in), f)
-
-trait ConsoleRunnerServiceBeans:
-  lazy val runnerService = new RunnerService
+trait RunnerServiceBeans:
+  def runnerService[S <: InputState[S]] = new RunnerService[S]

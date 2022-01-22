@@ -3,6 +3,6 @@ package f.model.in
 case class YorNQuestion(
     id: String,
     question: String,
-    yesText: String = "Yes",
-    noText: String = "No"
+    yesText: String = "Y",
+    noText: String = "N"
 ) extends Input

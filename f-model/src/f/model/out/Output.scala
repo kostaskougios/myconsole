@@ -1,3 +1,5 @@
 package f.model.out
 
-trait Output
+import f.model.InputOrOutput
+
+trait Output extends InputOrOutput
