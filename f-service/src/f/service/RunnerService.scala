@@ -10,7 +10,7 @@ import scala.io.StdIn
   *   - If the code runs within a terminal, it uses a terminal in/out.
   *   - If the code runs in the notebook env, it uses notebook in/out
   */
-class RunnerService[S <: InputState[S]]:
+class RunnerService[S]:
   def execute(s: S, inOut: S => InOut[S]): S =
     val io = inOut(s)
     for (o <- io.out) render(o)
@@ -35,4 +35,4 @@ class RunnerService[S <: InputState[S]]:
         else s
 
 trait RunnerServiceBeans:
-  def runnerService[S <: InputState[S]] = new RunnerService[S]
+  def runnerService[S] = new RunnerService[S]

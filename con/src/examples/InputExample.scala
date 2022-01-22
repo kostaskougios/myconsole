@@ -1,14 +1,15 @@
 package examples
 
 import f.model.InOut
-import f.model.in.{Input, InputState, YorNQuestion}
+import f.model.in.{Input, YorNQuestion}
 import f.model.out.Line
 import modules.StaticAppModule.*
 
 object InputExample:
   private val Q30YearsOld = YorNQuestion("1st", "Are you over 30 years old?")
 
-  case class State(over30: Option[Boolean] = None) extends InputState[State]
+  case class State(over30: Option[Boolean] = None)
+
   val inOut = InOut.forState[State]
 
   def simpleYN(state: State): InOut[State] =
