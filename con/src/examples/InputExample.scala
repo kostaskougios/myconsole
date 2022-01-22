@@ -8,13 +8,15 @@ import modules.StaticAppModule.*
 object InputExample:
   private val Q30YearsOld = YorNQuestion("1st", "Are you over 30 years old?")
 
-  case class State(over30: Option[Boolean] = None) extends InputState[State]:
-    override def withAnswer(forInput: Input, answer: String): State =
-      forInput match
-        case Q30YearsOld => copy(over30 = Some(answer == "Y"))
+  case class State(over30: Option[Boolean] = None) extends InputState[State]
+  val inOut = InOut.forState[State]
 
-  def simpleYN(state: State) =
-    if state.over30.isEmpty then InOut(Q30YearsOld) else InOut.Done
+  def simpleYN(state: State): InOut[State] =
+    if state.over30.isEmpty then
+      inOut.withInput(Q30YearsOld) { (s, answer) =>
+        s.copy(over30 = Some(answer == "Y"))
+      }
+    else inOut
 
 import examples.InputExample.*
 @main

@@ -11,12 +11,11 @@ import scala.io.StdIn
   *   - If the code runs in the notebook env, it uses notebook in/out
   */
 class RunnerService[S <: InputState[S]]:
-  def execute(s: S, inOut: S => InOut): S =
-    val newS = inOut(s).io.foldLeft(s) {
-      case (s, i: Input) => ask(s, i)
-      case (s, o: Output) =>
-        render(o)
-        s
+  def execute(s: S, inOut: S => InOut[S]): S =
+    val io = inOut(s)
+    for (o <- io.out) render(o)
+    val newS = io.inAndHandler.foldLeft(s) { case (s, (i, f)) =>
+      ask(s, i, f)
     }
     newS
 
@@ -26,13 +25,13 @@ class RunnerService[S <: InputState[S]]:
       case Table(table) => TableFormatter.toConsole(table)
     println(text)
 
-  def ask(s: S, input: Input): S =
+  def ask(s: S, input: Input, f: (S, String) => S): S =
     input match
       case q @ YorNQuestion(id, question, yesText, noText) =>
         println(s"$question ($yesText / $noText) ?")
         val in = StdIn.readLine()
-        if in.equalsIgnoreCase(yesText) then s.withAnswer(q, yesText)
-        else if in.equalsIgnoreCase(noText) then s.withAnswer(q, noText)
+        if in.equalsIgnoreCase(yesText) then f(s, yesText)
+        else if in.equalsIgnoreCase(noText) then f(s, noText)
         else s
 
 trait RunnerServiceBeans:

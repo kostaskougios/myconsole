@@ -1,7 +1,6 @@
 package f.model.in
 
-import f.model.InputOrOutput
 import f.model.out.Output
 
-trait Input extends InputOrOutput:
+trait Input:
   def id: String
