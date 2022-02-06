@@ -5,4 +5,6 @@ case class YorNQuestion(
     question: String,
     yesText: String = "Y",
     noText: String = "N"
-) extends Input
+) extends Input:
+  def isYes(in: String): Boolean = in.equalsIgnoreCase(yesText)
+  def isNo(in: String): Boolean = in.equalsIgnoreCase(noText)
