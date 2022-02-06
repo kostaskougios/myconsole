@@ -58,7 +58,7 @@ trait AssemblyMultipleApps extends JavaModule {
 }
 
 object Deps {
-  val ScalaVersion = "3.1.0"
+  val ScalaVersion = "3.1.1"
   val ScalaTest = ivy"org.scalatest::scalatest:3.2.10"
 
   val AkkaVersion = "2.6.17"
