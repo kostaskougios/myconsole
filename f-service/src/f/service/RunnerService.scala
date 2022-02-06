@@ -11,8 +11,9 @@ import scala.io.StdIn
   *   - If the code runs in the notebook env, it uses notebook in/out
   */
 class RunnerService[S]:
-  def execute(s: S, answers: Answers, inOut: S => InOut[S]): S =
-    val io = inOut(s)
+  def calcNewState(s: S, answers: Answers, inOut: (S, Input, String) => S): S =
+    val newState = answers.all.foldLeft(s) { case (state, (input, answer)) => inOut(state, input, answer) }
+    newState
 
 trait RunnerServiceBeans:
   def runnerService[S] = new RunnerService[S]
